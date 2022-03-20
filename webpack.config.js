@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   // Entry nos permite decir el punto de entrada de nuestra aplicación
@@ -27,14 +28,31 @@ module.exports = {
         use: {
           loader: "babel-loader"
         }
+      },
+
+      // Rules for mini-css-extract-plugin
+      {
+        test: /\.css|.styl$/i,
+        use: [
+          MiniCssExtractPlugin.loader, 
+          'css-loader',
+          'stylus-loader'
+        ],
       }
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      inject: true,
-      template: './public/index.html',
-      filename: './index.html'
-    })
+    /*
+      HtmlWebpackPlugin agrega las etiquetas 
+      de los archivos de las que se necesitan
+      cargar en el documento HTML. Por ejemplo:
+      la etiqueta script y la etiqueta link:css
+    */
+    new HtmlWebpackPlugin({ // CONFIGURACIÓN DEL PLUGIN
+      inject: true, // INYECTA EL BUNDLE AL TEMPLATE HTML
+      template: './public/index.html', // LA RUTA AL TEMPLATE HTML
+      filename: './index.html' // NOMBRE FINAL DEL ARCHIVO
+    }),
+    new MiniCssExtractPlugin(),
   ]
 }
